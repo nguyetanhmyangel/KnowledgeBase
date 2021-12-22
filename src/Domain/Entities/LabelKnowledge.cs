@@ -3,7 +3,7 @@ using Domain.Abstractions;
 
 namespace Domain.Entities
 {
-    [Table("LabelKnowledgeBases")]
+    [Table("LabelKnowledge")]
     public class LabelKnowledge : AuditableBaseEntity<int>
     {
         public int KnowledgeId { get; set; }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AspNetCoreHero.Boilerplate.Application.Interfaces.Shared
+﻿namespace Application.Interfaces.Shared
 {
     public interface IDateTimeService
     {

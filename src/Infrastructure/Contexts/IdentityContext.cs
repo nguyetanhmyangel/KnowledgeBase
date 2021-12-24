@@ -1,9 +1,9 @@
-﻿using AspNetCoreHero.Boilerplate.Infrastructure.Identity.Models;
+﻿using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspNetCoreHero.Boilerplate.Infrastructure.DbContexts
+namespace Infrastructure.Contexts
 {
     public class IdentityContext : IdentityDbContext<ApplicationUser>
     {

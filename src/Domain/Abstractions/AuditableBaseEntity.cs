@@ -9,11 +9,11 @@ namespace Domain.Abstractions
         public DateTime CreateDate { get; set; }
 
         [MaxLength(50)]
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
 
         [MaxLength(50)]
-        public string LastModifiedBy { get; set; }
+        public string? LastModifiedBy { get; set; }
 
         //public bool IsTransient()
         //{

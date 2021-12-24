@@ -1,4 +1,6 @@
 ﻿using Application.Exceptions;
+using Infrastructure.Share.Wrapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Extensions
 {

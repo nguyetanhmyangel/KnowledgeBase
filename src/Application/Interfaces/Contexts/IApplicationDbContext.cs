@@ -12,7 +12,7 @@ namespace Application.Interfaces.Contexts
         IDbConnection Connection { get; }
         bool HasChanges { get; }
 
-        EntityEntry Entry(object entity);
+        //EntityEntry Entry(object entity);
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 

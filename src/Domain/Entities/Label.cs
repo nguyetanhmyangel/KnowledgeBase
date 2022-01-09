@@ -5,7 +5,7 @@ using Domain.Abstractions;
 namespace Domain.Entities
 {
     [Table("Labels")]
-    public class Label : AuditableBaseEntity<int>
+    public class Label : AuditableEntity<int>
     {
         [MaxLength(50)]
         public string Name { get; set; }

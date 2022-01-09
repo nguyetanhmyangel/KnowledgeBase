@@ -4,7 +4,7 @@ using Domain.Abstractions;
 namespace Domain.Entities
 {
     [Table("AppCommandFunctions")]
-    public class AppCommandFunction : AuditableBaseEntity<int>
+    public class AppCommandFunction : AuditableEntity<int>
     {
         public int AppCommandId { get; set; }
 

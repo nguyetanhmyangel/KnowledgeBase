@@ -4,7 +4,7 @@ using Domain.Abstractions;
 namespace Domain.Entities
 {
     [Table("AppPermissions")]
-    public class AppPermission : AuditableBaseEntity<int>
+    public class AppPermission : AuditableEntity<int>
     {
         //public Privilege(string functionId, string roleId, string commandId)
         //{

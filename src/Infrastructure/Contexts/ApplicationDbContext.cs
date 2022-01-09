@@ -1,45 +1,41 @@
-﻿using Application.Interfaces.Contexts;
+﻿using Application.Interfaces.Services;
+using Domain.Abstractions;
 using Domain.Entities;
+using Infrastructure.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Application.Interfaces.Shared;
-using Domain.Abstractions;
-using Infrastructure.Identity.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Contexts
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : AuditableContext
     {
         private readonly IDateTimeService _dateTime;
         private readonly IAuthenticatedUserService _authenticatedUser;
 
-        public ApplicationDbContext(DbContextOptions options, IDateTimeService dateTime, IAuthenticatedUserService authenticatedUser) : base(options)
+        public ApplicationDbContext(DbContextOptions options, IDateTimeService dateTime, IAuthenticatedUserService authenticatedUser)
+            : base(options)
         {
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
 
-
         public IDbConnection Connection => Database.GetDbConnection();
 
         public bool HasChanges => ChangeTracker.HasChanges();
 
-
-        public DbSet<AppCommand> AppCommands { get; set; } = null!;
-        public DbSet<AppCommandFunction> AppCommandFunctions { get; set; } = null!;
-        public DbSet<ActivityLog> ActivityLogs { get; set; } = null!;
-        public DbSet<Category> Categories { get; set; } = null!;
-        public DbSet<Comment> Comments { get; set; } = null!;
-        public DbSet<Function> Functions { get; set; } = null!;
-        public DbSet<Knowledge> Knowledge { get; set; } = null!;
-        public DbSet<Label> Labels { get; set; } = null!;
-        public DbSet<LabelKnowledge> LabelInKnowledge { get; set; } = null!;
-        public DbSet<AppPermission> AppPermissions { get; set; } = null!;
-        public DbSet<Report> Reports { get; set; } = null!;
-        public DbSet<Vote> Votes { get; set; } = null!;
-        public DbSet<Attachment> Attachments { get; set; } = null!;
+        public DbSet<AppCommand> AppCommands { get; set; }
+        public DbSet<AppCommandFunction> AppCommandFunctions { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Function> Functions { get; set; }
+        public DbSet<Knowledge> Knowledge { get; set; }
+        public DbSet<Label> Labels { get; set; }
+        public DbSet<LabelKnowledge> LabelInKnowledge { get; set; }
+        public DbSet<AppPermission> AppPermissions { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<Vote> Votes { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -47,23 +43,22 @@ namespace Infrastructure.Contexts
                 .Where(e => e.State is EntityState.Modified or EntityState.Added);
             foreach (var item in modified)
             {
-                if (item.Entity is IAuditableBaseEntity changedOrAddedItem)
+                if (item.Entity is IAuditableEntity changedOrAddedItem)
                 {
                     if (item.State == EntityState.Added)
                     {
-                        changedOrAddedItem.CreateDate = _dateTime.NowUtc;
+                        changedOrAddedItem.CreatedOn = _dateTime.NowUtc;
                         changedOrAddedItem.CreatedBy = _authenticatedUser.UserId;
                     }
                     else
                     {
-                        changedOrAddedItem.LastModifiedDate = _dateTime.NowUtc;
+                        changedOrAddedItem.LastModifiedOn = _dateTime.NowUtc;
                         changedOrAddedItem.LastModifiedBy = _authenticatedUser.UserId;
                     }
                 }
             }
             return base.SaveChangesAsync(cancellationToken);
         }
-
 
         //public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         //{
@@ -102,42 +97,42 @@ namespace Infrastructure.Contexts
             }
             base.OnModelCreating(builder);
 
-            builder.HasDefaultSchema("Identity");
+            //builder.HasDefaultSchema("Identity");
             builder.Entity<ApplicationUser>(entity =>
             {
-                entity.ToTable(name: "Users");
+                entity.ToTable(name: "Users", "Identity");
             });
 
             builder.Entity<IdentityRole>(entity =>
             {
-                entity.ToTable(name: "Roles");
+                entity.ToTable(name: "Roles", "Identity");
             });
             builder.Entity<IdentityUserRole<string>>(entity =>
             {
-                entity.ToTable("UserRoles");
+                entity.ToTable("UserRoles", "Identity");
             });
 
             builder.Entity<IdentityUserClaim<string>>(entity =>
             {
-                entity.ToTable("UserClaims");
+                entity.ToTable("UserClaims", "Identity");
             });
 
             builder.Entity<IdentityUserLogin<string>>(entity =>
             {
-                entity.ToTable("UserLogins");
+                entity.ToTable("UserLogins", "Identity");
             });
 
             builder.Entity<IdentityRoleClaim<string>>(entity =>
             {
-                entity.ToTable("RoleClaims");
+                entity.ToTable("RoleClaims", "Identity");
             });
 
             builder.Entity<IdentityUserToken<string>>(entity =>
             {
-                entity.ToTable("UserTokens");
+                entity.ToTable("UserTokens", "Identity");
             });
 
-            builder.HasSequence("KnowledgeBaseSequence");
+            builder.HasSequence("KnowledgeSequence");
 
             builder.Entity<AppCommandFunction>()
                 .HasIndex(p => new { p.AppCommandId, p.FunctionId })
@@ -150,7 +145,6 @@ namespace Infrastructure.Contexts
             builder.Entity<LabelKnowledge>()
                 .HasIndex(p => new { p.LabelId, p.KnowledgeId })
                 .IsUnique(true);
-
         }
     }
 }

@@ -5,7 +5,7 @@ using Domain.Abstractions;
 namespace Domain.Entities
 {
     [Table("Functions")]
-    public class Function : AuditableBaseEntity<int>
+    public class Function : AuditableEntity<int>
     {
         [MaxLength(500)]
         [Required]

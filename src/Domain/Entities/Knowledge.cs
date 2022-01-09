@@ -5,7 +5,7 @@ using Domain.Abstractions;
 namespace Domain.Entities
 {
     [Table("Knowledge")]
-    public class Knowledge : AuditableBaseEntity<int>
+    public class Knowledge : AuditableEntity<int>
     {
         [Required]
         public int CategoryId { get; set; }

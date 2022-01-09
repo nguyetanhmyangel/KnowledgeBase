@@ -4,7 +4,7 @@ using Domain.Abstractions;
 namespace Domain.Entities
 {
     [Table("Votes")]
-    public class Vote : AuditableBaseEntity<int>
+    public class Vote : AuditableEntity<int>
     {
         public int KnowledgeId { get; set; }
 

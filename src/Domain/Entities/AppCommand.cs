@@ -6,7 +6,7 @@ namespace Domain.Entities
 {
     // Like Command
     [Table("AppCommands")]
-    public class AppCommand : AuditableBaseEntity<int>
+    public class AppCommand : AuditableEntity<int>
     {
         [MaxLength(50)]
         [Required]

@@ -5,7 +5,7 @@ using Domain.Abstractions;
 namespace Domain.Entities
 {
     [Table("Comments")]
-    public class Comment : AuditableBaseEntity<int>
+    public class Comment : AuditableEntity<int>
     {
         [MaxLength(500)]
         [Required]
